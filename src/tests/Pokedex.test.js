@@ -16,7 +16,7 @@ function renderWithRouter(component) {
 
 describe('Requisito 5, testa o componente pokedex', () => {
   it('testa se a página contém um h2 com o texto Encountered pokémons', () => {
-    renderWithRouter(<Pokedex isPokemonFavoriteById={ [] } pokemons={ pokemons } />);
+    renderWithRouter(<Pokedex isPokemonFavoriteById={ {} } pokemons={ pokemons } />);
 
     const h2 = screen.getByRole('heading', {
       level: 2,
@@ -27,7 +27,7 @@ describe('Requisito 5, testa o componente pokedex', () => {
   });
 
   it('testa se é exibido próximo Pokémon ao ser clicado o botão Próximo pokémon', () => {
-    renderWithRouter(<Pokedex isPokemonFavoriteById={ [] } pokemons={ pokemons } />);
+    renderWithRouter(<Pokedex isPokemonFavoriteById={ {} } pokemons={ pokemons } />);
 
     const LIMIT_LOOP = 9;
     const POKEMON_NAMES_BY_PAGE = [];
@@ -58,18 +58,74 @@ describe('Requisito 5, testa o componente pokedex', () => {
   });
 
   it('testa se é mostrado apenas um Pokémon por vez.', () => {
-    renderWithRouter(<Pokedex isPokemonFavoriteById={ [] } pokemons={ pokemons } />);
+    renderWithRouter(<Pokedex isPokemonFavoriteById={ {} } pokemons={ pokemons } />);
 
     const img = screen.getAllByRole('img');
     expect(img).toHaveLength(1);
   });
 
   it('testa se a Pokédex tem os botões de filtro.', () => {
-    renderWithRouter(<Pokedex isPokemonFavoriteById={ [] } pokemons={ pokemons } />);
+    renderWithRouter(<Pokedex isPokemonFavoriteById={ {} } pokemons={ pokemons } />);
 
-    pokemons.forEach((obj) => {
-      const btn = screen.getByText(obj.type);
-      console.log(btn);
+    // Deve existir um botão de filtragem para cada tipo de Pokémon, sem repetição.
+    const btns = screen.getAllByRole('button');
+    btns.pop();
+
+    const types = btns.map((obj) => {
+      expect(obj).toBeInTheDocument();
+      const arr = Object.values(obj);
+      const { children: type } = arr[arr.length - 1];
+      return type;
+    });
+
+    btns.forEach((obj) => {
+      const arr = Object.values(obj);
+      const { 'data-testid': value } = arr[arr.length - 1];
+      expect(value).toBe('pokemon-type-button');
+    });
+
+    types.forEach((curr) => {
+      const filtered = types.filter((type) => type === curr);
+      expect(filtered).toHaveLength(1);
+    });
+
+    // A partir da seleção de um botão de tipo, a Pokédex deve circular somente pelos pokémons daquele tipo;
+    userEvent.click(btns[2]);
+    const btnNextPokemon = screen.getByTestId('next-pokemon');
+
+    for (let index = 0; index < 2; index += 1) {
+      const objType = screen.getByTestId('pokemon-type');
+      const arr = Object.values(objType);
+      const { children: type } = arr[arr.length - 1];
+
+      expect(type).toBe('Fire');
+      userEvent.click(btnNextPokemon);
+    }
+
+    expect(btns[0]).toBeInTheDocument();
+  });
+
+  it('testa se a Pokédex contém um botão para resetar o filtro', () => {
+    renderWithRouter(<Pokedex isPokemonFavoriteById={ {} } pokemons={ pokemons } />);
+
+    const btns = screen.getAllByRole('button');
+
+    const arr = Object.values(btns[0]);
+    const { children: nameButton } = arr[arr.length - 1];
+
+    expect(btns[0]).toBeInTheDocument();
+    expect(nameButton).toBe('All');
+
+    userEvent.click(btns[0]);
+
+    pokemons.forEach((curr) => {
+      const eleName = screen.getByTestId('pokemon-name');
+      const arrNameElement = Object.values(eleName);
+      const { children: name } = arrNameElement[arrNameElement.length - 1];
+
+      expect(name).toBe(curr.name);
+      expect(eleName).toBeInTheDocument();
+      userEvent.click(btns[btns.length - 1]);
     });
   });
 });
