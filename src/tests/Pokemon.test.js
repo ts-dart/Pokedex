@@ -4,7 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import App from '../App';
-import pokemons from '../data';
+
+const MORE_DETAILS = 'More details';
 
 function renderWithRouter(component) {
   const history = createMemoryHistory();
@@ -18,7 +19,7 @@ describe('Requisito 6, teste o componente Pokemon', () => {
   it('testa se é renderizado um card com informações de determinado pokémon.', () => {
     renderWithRouter(<App />);
 
-    const btnMoreInfo = screen.getByRole('link', { name: 'More details' });
+    const btnMoreInfo = screen.getByRole('link', { name: MORE_DETAILS });
     userEvent.click(btnMoreInfo);
 
     const objName = screen.getByTestId('pokemon-name');
@@ -52,7 +53,7 @@ describe('Requisito 6, teste o componente Pokemon', () => {
   it('Teste se o card tem um link de navegação para exibir infos deste Pokémon', () => {
     const { history } = renderWithRouter(<App />);
 
-    const btnMoreInfo = screen.getByRole('link', { name: 'More details' });
+    const btnMoreInfo = screen.getByRole('link', { name: MORE_DETAILS });
     const arr = Object.values(btnMoreInfo);
     const { href } = arr[arr.length - 1];
 
@@ -68,7 +69,7 @@ describe('Requisito 6, teste o componente Pokemon', () => {
   it('testa se existe um ícone de estrela nos Pokémons favoritados', () => {
     renderWithRouter(<App />);
 
-    const btnMoreInfo = screen.getByRole('link', { name: 'More details' });
+    const btnMoreInfo = screen.getByRole('link', { name: MORE_DETAILS });
     userEvent.click(btnMoreInfo);
 
     const input = screen.getByRole('checkbox');
