@@ -5,6 +5,8 @@ import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
+const MORE_DETAILS = 'More details';
+
 function renderWithRouter(component) {
   const history = createMemoryHistory();
   return ({
@@ -17,7 +19,7 @@ describe('Requisito 7, teste o componente PokemonDetails', () => {
   it('testa se as informações do Pokémon selecionado são mostradas na tela', () => {
     renderWithRouter(<App />);
 
-    const btnMoreInfo = screen.getByRole('link', { name: 'More details' });
+    const btnMoreInfo = screen.getByRole('link', { name: MORE_DETAILS });
     userEvent.click(btnMoreInfo);
 
     const nameDetailsObj = screen.getByRole('heading', {
@@ -54,7 +56,7 @@ describe('Requisito 7, teste o componente PokemonDetails', () => {
   it('testa se existe um mapa contendo as localizações do pokémon', () => {
     renderWithRouter(<App />);
 
-    const btnMoreInfo = screen.getByRole('link', { name: 'More details' });
+    const btnMoreInfo = screen.getByRole('link', { name: MORE_DETAILS });
     userEvent.click(btnMoreInfo);
 
     const nameLocationsObj = screen.getByRole('heading', {
@@ -87,14 +89,14 @@ describe('Requisito 7, teste o componente PokemonDetails', () => {
   it('testa se o usuário pode favoritar um pokémon na página de detalhes.', () => {
     renderWithRouter(<App />);
 
-    const btnMoreInfo = screen.getByRole('link', { name: 'More details' });
+    const btnMoreInfo = screen.getByRole('link', { name: MORE_DETAILS });
     userEvent.click(btnMoreInfo);
 
     const inputCheckbox = screen.getByLabelText('Pokémon favoritado?');
     expect(inputCheckbox).toBeInTheDocument();
-		console.log(inputCheckbox);
+    console.log(inputCheckbox);
     userEvent.click(inputCheckbox);
-		console.log(inputCheckbox);
+    console.log(inputCheckbox);
 
     const linkFavPokemons = screen.getByRole('link', { name: 'Favorite Pokémons' });
     userEvent.click(linkFavPokemons);
