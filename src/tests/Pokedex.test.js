@@ -78,11 +78,8 @@ describe('Requisito 5, testa o componente pokedex', () => {
       return type;
     });
 
-    btns.forEach((obj) => {
-      const arr = Object.values(obj);
-      const { 'data-testid': value } = arr[arr.length - 1];
-      expect(value).toBe('pokemon-type-button');
-    });
+    const btnsByTest = screen.getAllByTestId('pokemon-type-button');
+    btnsByTest.forEach((btn) => expect(btn).toBeInTheDocument());
 
     types.forEach((curr) => {
       const filtered = types.filter((type) => type === curr);
