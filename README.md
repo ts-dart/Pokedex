@@ -1,15 +1,18 @@
 # Projeto Pokedex
 
-## Orientações
+### Orientações
 Faça o git clone:
+
     git@github.com:ts-dart/Pokedex.git
 
 Faça a instalação dos pacotes:
+
     npm install
-## O que foi desenvolvido
+    
+### O que foi desenvolvido
 Nesse projeto foram escritos testes para uma aplicação React, a aplicação foi feita por outros, por mim foi escrito apenas os testes.
 
-## Habilidades
+### Habilidades
 Habilidades desenvolvidas neste projeto.
 
 * Utilizar os seletores (queries) da React-Testing-Library em testes automatizados.
